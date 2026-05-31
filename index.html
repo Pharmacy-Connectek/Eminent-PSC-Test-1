@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eminent PSC Mock tests</title>
+    <style>
+        :root {
+            --primary-color: #1e3a8a;
+            --secondary-color: #3b82f6;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --neutral-grey: #6b7280;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-color: #1f2937;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .quiz-container {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            width: 100%;
+            max-width: 700px;
+            padding: 30px;
+            box-sizing: border-box;
+        }
+
+        .brand-header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 15px;
+        }
+
+        .logo {
+            max-width: 220px;
+            height: auto;
+            display: block;
+            margin: 0 auto 10px auto;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 26px;
+            text-align: center;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .progress-bar {
+            background-color: #e5e7eb;
+            border-radius: 10px;
+            height: 8px;
+            width: 70%;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background-color: var(--secondary-color);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .statement-box {
+            background-color: #f9fafb;
+            border-left: 4px solid var(--secondary-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 0 8px 8px 0;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background-color: #ffffff;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 14px 20px;
+            text-align: left;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background-color: #f0fdf4;
+            border-color: var(--secondary-color);
+        }
+
+        .option-btn.correct {
+            background-color: #d1fae5;
+            border-color: var(--success-color);
+            color: #065f46;
+        }
+
+        .option-btn.wrong {
+            background-color: #fee2e2;
+            border-color: var(--danger-color);
+            color: #991b1b;
+        }
+
+        .explanation-box {
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            display: none;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .explanation-box strong {
+            color: var(--primary-color);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            align-items: center;
+        }
+
+        .nav-btn {
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+        .prev-btn {
+            background-color: var(--neutral-grey);
+        }
+
+        .prev-btn:hover {
+            background-color: #4b5563;
+        }
+
+        .next-btn {
+            background-color: var(--primary-color);
+        }
+
+        .next-btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        .result-screen {
+            text-align: center;
+            display: none;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: #eff6ff;
+            border: 5px solid var(--secondary-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 36px;
+            font-weight: bold;
+            margin: 30px auto;
+            color: var(--primary-color);
+        }
+
+        .restart-btn {
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <!-- Quiz Interface -->
+    <div id="quiz-screen">
+        <div class="brand-header">
+            <img src="image_7b0465.png" alt="Eminent PSC Logo" class="logo">
+            <h1>Eminent PSC Mock tests</h1>
+        </div>
+        
+        <div class="progress-container">
+            <span id="progress-text">ചോദ്യം 1/20</span>
+            <div class="progress-bar">
+                <div id="progress-fill" class="progress-fill"></div>
+            </div>
+        </div>
+
+        <div id="statements" class="statement-box" style="display: none;"></div>
+        <div id="question" class="question-text"></div>
+        
+        <div id="options" class="options-container"></div>
+
+        <div id="explanation" class="explanation-box"></div>
+
+        <div class="nav-container">
+            <button id="prev-button" class="nav-btn prev-btn" onclick="prevQuestion()">മുൻപത്തെ ചോദ്യം</button>
+            <button id="next-button" class="nav-btn next-btn" style="display: none;" onclick="nextQuestion()">അടുത്ത ചോദ്യം</button>
+        </div>
+    </div>
+
+    <!-- Result Interface -->
+    <div id="result-screen" class="result-screen">
+        <div class="brand-header">
+            <img src="image_7b0465.png" alt="Eminent PSC Logo" class="logo">
+            <h1>ടെസ്റ്റ് പൂർത്തിയായി!</h1>
+        </div>
+        <p style="font-size: 18px; margin-top: 20px;">നിങ്ങളുടെ ആകെ സ്കോർ:</p>
+        <div id="score-display" class="score-circle">0 / 20</div>
+        <p id="performance-message" style="font-size: 16px; font-weight: 600; margin-bottom: 30px;"></p>
+        <button class="restart-btn" onclick="restartQuiz()">വീണ്ടും ശ്രമിക്കുക</button>
+    </div>
+</div>
+
+<script>
+    const quizData = [
+        {
+            statements: "I. തെക്കുപടിഞ്ഞാറൻ മൺസൂൺ കാലത്ത് കടൽ പ്രക്ഷുബ്ധമാകുമ്പോഴാണ് ഇത് സാധാരണയായി രൂപപ്പെടുന്നത്.<br>II. കടലിന്റെ അടിത്തട്ടിലെ സൂക്ഷ്മമായ കളിമണ്ണും (Silt and Clay) ജൈവാംശങ്ങളും മുകളിലേക്ക് ഉയരുന്ന പ്രതിഭാസമാണിത്.<br>III. ആലപ്പുഴയിലെ പുറക്കാട് തീരം ചാകര രൂപീകരണത്തിന് ആഗോളതലത്തിൽ തന്നെ പ്രശസ്തമാണ്.",
+            question: "കേരള തീരത്തെ 'ചാകര' (Mudbanks) രൂപീകരണവുമായി ബന്ധപ്പെട്ട മുകളിൽ നൽകിയ പ്രസ്താവനകൾ പരിശോധിക്കുക:",
+            options: ["I, II എന്നിവ മാത്രം ശരി", "II, III എന്നിവ മാത്രം ശരി", "I, III എന്നിവ മാത്രം ശരി", "I, II, III എന്നിവയെല്ലാം ശരി"],
+            answer: 3,
+            explanation: "മൺസൂൺ കാലത്തെ പ്രത്യേക തരം തരംഗ ചലനങ്ങളും (Wave action) ഭൂഗർഭ മൺതുരുത്തുകളുടെ സ്ഥാനചലനവുമാണ് ചാകരയ്ക്ക് കാരണം. ഈ സമയത്ത് കടൽ ശാന്തമാവുകയും ധാരാളമായി മീനുകൾ ഇവിടെ കേന്ദ്രീകരിക്കുകയും ചെയ്യുന്നു."
+        },
+        {
+            statements: "I. പോസിറ്റീവ് IOD ഉള്ള വർഷങ്ങളിൽ പടിഞ്ഞാറൻ ഇന്ത്യൻ മഹാസമുദ്രത്തിലെ (അറബിക്കടൽ) ഉപരിതല താപനില കിഴക്കൻ സമുദ്രത്തേക്കാൾ കൂടുതലായിരിക്കും.<br>II. പോസിറ്റീവ് IOD സാധാരണയായി കേരളത്തിൽ ശക്തമായ മൺസൂൺ മഴയ്ക്ക് കാരണമാവുകയും എൽ നിനോയുടെ (El Nino) ദോഷഫലങ്ങളെ പ്രതിരോധിക്കുകയും ചെയ്യുന്നു.<br>III. നെഗറ്റീവ് IOD ഉള്ള വർഷങ്ങളിൽ അറബിക്കടലിൽ മഴയുടെ അളവ് куത്തനെ കൂടുന്നു.",
+            question: "ഇന്ത്യൻ മൺസൂണിനെ സ്വാധീനിക്കുന്ന 'ഇന്ത്യൻ മഹാസമുദ്ര ദ്വിധ്രുവം' (Indian Ocean Dipole - IOD) സംബന്ധിച്ച പ്രസ്താവനകളിൽ ഏതാണ് ശരി?",
+            options: ["I മാത്രം", "I, II എന്നിവ മാത്രം", "II, III എന്നിവ മാത്രം", "I, II, III എല്ലാം ശരി"],
+            answer: 1,
+            explanation: "നെഗറ്റീവ് IOD ഉള്ളപ്പോൾ കിഴക്കൻ ഇന്ത്യൻ മഹാസമുദ്രത്തിലാണ് താപനില കൂടുന്നത്. ഇത് ഇന്ത്യയിൽ മൺസൂൺ മഴ കുറയാൻ കാരണമാകുന്നു. അതിനാൽ മൂന്നാമത്തെ പ്രസ്താവന തെറ്റാണ്."
+        },
+        {
+            statements: "I. ഇവ പ്ലീസ്റ്റോസീൻ (Pleistocene) യുഗത്തിലെ തടാക നിക്ഷേപങ്ങളാണ് (Lacustrine deposits).<br>II. ലോകപ്രശസ്തമായ കാശ്മീരി കുങ്കുമപ്പൂവ് (Saffron/Zafran) കൃഷി ചെയ്യുന്നത് ഇത്തരം മണ്ണിലാണ്.<br>III. ഝലം നദിയും അതിന്റെ പോഷകനദികളും ചേർന്നാണ് ഈ പീഠഭൂമി സദൃശ്യമായ നിക്ഷേപങ്ങൾ രൂപപ്പെടുത്തിയത്.",
+            question: "കാശ്മീർ താഴ്‌വരയിൽ കാണപ്പെടുന്ന 'കരേവകൾ' (Karewas) എന്ന ഭൗമപ്രകൃതിയെക്കുറിച്ചുള്ള പ്രസ്താവനകളിൽ ശരിയായത് ഏത്?",
+            options: ["I, II എന്നിവ മാത്രം", "II, III എന്നിവ മാത്രം", "I, III എന്നിവ മാത്രം", "I, II, III എല്ലാം ശരി"],
+            answer: 3,
+            explanation: "പണ്ട് താഴ്‌വരയിലുണ്ടായിരുന്ന വലിയ തടാകങ്ങൾ വറ്റിവരണ്ടപ്പോൾ അടിഞ്ഞുകൂടിയ കളിമണ്ണും മണലും ചേർന്ന കനത്ത പാളികളാണ് കരേവകൾ. ഇത് കുങ്കുമപ്പൂവിന് പുറമെ ആപ്പിൾ, ബദാം കൃഷിക്കും അനുയോജ്യമാണ്."
+        },
+        {
+            statements: "I. കേരളത്തിലെ ഭൂരിഭാഗം പ്രദേശങ്ങളും (ഏകദേശം 88%) പ്രീ-കാംബ്രിയൻ യുഗത്തിലെ 'ചാർണോക്കൈറ്റ്' (Charnockite), 'കോൺഡലൈറ്റ്' (Khondalite) ശിലകളാൽ നിർമ്മിതമാണ്.<br>II. തൃതീയ യുഗത്തിലെ (Tertiary period) നിക്ഷേപങ്ങളായ 'വർക്കല ഫോർമേഷൻസ്' ലിഗ്നൈറ്റ്, ചൈനാക്ലേ നിക്ഷേപങ്ങൾക്ക് പ്രസിദ്ധമാണ്.<br>III. ചവറയിലെ കരിമണൽ നിക്ഷേപം കാണപ്പെടുന്നത് ഏറ്റവും പ്രായം കുറഞ്ഞ ക്വട്ടേണറി (Quaternary) യുഗത്തിലെ തീരദേശ നിക്ഷേപങ്ങളിലാണ്.",
+            question: "കേരളത്തിന്റെ ഭൗമശാസ്ത്ര ഘടനയെ (Geology of Kerala) സംബന്ധിച്ച താഴെ പറയുന്ന പ്രസ്താവനകൾ വിലയിരുത്തുക:",
+            options: ["I, II എന്നിവ മാത്രം", "II, III എന്നിവ മാത്രം", "I, III എന്നിവ മാത്രം", "I, II, III എല്ലാം ശരി"],
+            answer: 3,
+            explanation: "കേരളത്തിന്റെ അടിത്തറ രൂപപ്പെട്ടിരിക്കുന്നത് അതിപുരാതനമായ സ്ഫടിക ശിലകൾ (Crystalline rocks) കൊണ്ടാണ്. പടിഞ്ഞാറൻ തീരപ്രദേശങ്ങളിലാണ് താരതമ്യേന പ്രായം കുറഞ്ഞ തൃതീയ-ക്വട്ടേണറി യുഗങ്ങളിലെ അവസാദ ശിലകളും കരിമണലും കാണപ്പെടുന്നത്."
+        },
+        {
+            statements: "<strong>പ്രസ്താവന (A):</strong> പശ്ചിമഘട്ടം യഥാർത്ഥ മടക്കുപർവ്വതങ്ങളല്ല (Fold Mountains), മറിച്ച് ഒരു ഭ്രംശ പീഠഭൂമിയുടെ (Fault-block/Escarpment) അരികുകളാണ്.<br><strong>காரണം (R):</strong> അറേബ്യൻ കടൽ രൂപപ്പെട്ടപ്പോൾ ഇന്ത്യൻ ഉപദ്വീപിന്റെ പടിഞ്ഞാറൻ ഭാഗം താഴേക്ക് ഇടിഞ്ഞുപോയതിന്റെ (Subsided Faulting) ഫലമായാണ് പശ്ചിമഘട്ടത്തിന്റെ പടിഞ്ഞാറൻ ചരിവ് കുത്തനെയുള്ളതായി മാറിയത്.",
+            question: "പശ്ചിമഘട്ടത്തിന്റെ നിർമ്മിതിയെക്കുറിച്ചുള്ള ഈ പ്രസ്താവനകൾ വിശകലനം ചെയ്യുക:",
+            options: [
+                "A, R എന്നിവ ശരിയാണ്, R എന്നത് A യുടെ ശരിയായ വിശദീകരണമാണ്.",
+                "A, R എന്നിവ ശരിയാണ്, എന്നാൽ R എന്നത് A യുടെ ശരിയായ വിശദീകരണമല്ല.",
+                "A ശരിയാണ്, എന്നാൽ R തെറ്റാണ്.",
+                "A തെറ്റാണ്, എന്നാൽ R ശരിയാണ്."
+            ],
+            answer: 0,
+            explanation: "ഹിമാലയം പോലെ രണ്ട് പ്ലേറ്റുകൾ ഇടിച്ചുണ്ടായ മടക്കുകളല്ല പശ്ചിമഘട്ടം. ഗോണ്ട്വാന ലാൻഡ് പിളർന്ന് മാറിയപ്പോൾ ഉണ്ടായ ഭ്രംശനം (Faulting) മൂലം ഒരു വശം കുത്തനെ ഉയർന്നുവന്നതാണ് ഇതിന്റെ ഘടന."
+        },
+        {
+            statements: null,
+            question: "കേരളത്തിൽ വ്യാപകമായി കാണപ്പെടുന്ന ലാറ്ററൈറ്റ് (വെട്ടുക്കല്ല്) മണ്ണിന്റെ രൂപീകരണത്തിന് കാരണമാകുന്ന പ്രധാന ഭൗമപ്രക്രിയ ഏതാണ്?",
+            options: ["കൽസിഫിക്കേഷൻ (Calcification)", "ഡീസിലിക്കേഷൻ അല്ലെങ്കിൽ തീവ്ര ലീച്ചിങ് (Desilication / Intense Leaching)", "പോഡ്സോളൈസേഷൻ (Podzolization)", "ഗ്ലീസേഷൻ (Gleying)"],
+            answer: 1,
+            explanation: "ഉയർന്ന താപനിലയും മാറിമാറി വരുന്ന വരണ്ടതും ഈർപ്പമുള്ളതുമായ കാലാവസ്ഥയും കാരണം മണ്ണിലെ സിലിക്ക ജലത്തിൽ ലയിച്ച് താഴേക്ക് ഒലിച്ചുപോകുന്നു (Leaching). ഇതോടെ മണ്ണിൽ ഇരുമ്പ്, അലുമിനിയം ഓക്സൈഡുകൾ മാത്രം ബാക്കിയാവുകയും അത് കട്ടിയുള്ള ലാറ്ററൈറ്റ് മണ്ണായി മാറുകയും ചെയ്യുന്നു."
+        },
+        {
+            statements: null,
+            question: "വിശിഷ്ടമായ 'ചോല-പുൽമേട്' (Shola-Grassland) ആവാസവ്യവസ്ഥയുമായി ബന്ധപ്പെട്ട പ്രസ്താവനകളിൽ തെറ്റായ പ്രസ്താവന ഏതാണ്?",
+            options: [
+                "ചോല വനങ്ങൾ പശ്ചിമഘട്ടത്തിലെ മലയിടുക്കുകളിലും താഴ്‌വരകളിലും പുൽമേടുകൾ കുന്നുകളുടെ മുകളിലും കാണപ്പെടുന്നു.",
+                "വനശാസ്ത്രപരമായി ഇവ ദക്ഷിണേന്ത്യൻ മോണ്ടേൻ സമശീതോഷ്ണ വനങ്ങൾ എന്ന വിഭാഗത്തിൽപ്പെടുന്നു.",
+                "ചോല വനങ്ങളിലെ മരങ്ങൾ ഉയർന്ന താപനില കാരണം വളരെ വേഗത്തിൽ വളരുന്നവയും നീളമുള്ളതുമാണ്.",
+                "ഈ ആവാസവ്യവസ്ഥ ദക്ഷിണേന്ത്യയിലെ പല നദികളുടെയും ਉത്ഭവകേന്ദ്രമായതിനാൽ ഇവയെ 'ജലസംഭരണികൾ' എന്ന് വിളിക്കുന്നു."
+            ],
+            answer: 2,
+            explanation: "ഉയർന്ന പ്രദേശങ്ങളിലെ കടുത്ത കാറ്റും തണുപ്പും കാരണം ചോല വനങ്ങളിലെ മരങ്ങൾ വളരെ കുള്ളന്മാരും (Stunted), വളഞ്ഞുപുളഞ്ഞ ശാഖകളോടു കൂടിയതുമാണ്. അതിനാൽ ഈ പ്രസ്താവന തെറ്റാണ്."
+        },
+        {
+            statements: "I. ബംഗാൾ ഉൾക്കടലിനെ അപേക്ഷിച്ച് അറബിക്കടലിലെ ഉപരിതല ലവണാംശം (Salinity) വളരെ കൂടുതലാണ്.<br>II. അറബിക്കടലിലേക്ക് വലിയ നദികളിൽ നിന്നുള്ള ശുദ്ധജല പ്രവാഹം കുറവായതിനാൽ അവിടെ സമുദ്രജല പാളികളുടെ മിശ്രണം (Mixing) വേഗത്തിൽ നടക്കുന്നു.<br>III. കുറഞ്ഞ ലവണാംശവും ഉയർന്ന ഉപരിതല താപനിലയും കാരണം ബംഗാൾ ഉൾക്കടലിലാണ് അറബിക്കടലിനേക്കാൾ കൂടുതൽ ചുഴലിക്കാറ്റുകൾ (Cyclones) രൂപപ്പെടുന്നത്.",
+            question: "അറബിക്കടലും ബംഗാൾ ഉൾക്കടലും തമ്മിലുള്ള ഭൂമിശാസ്ത്രപരമായ വ്യത്യാസങ്ങൾ സംബന്ധിച്ച പ്രസ്താവനകൾ ശ്രദ്ധിക്കുക:",
+            options: ["I, II എന്നിവ മാത്രം", "II, III എന്നിവ മാത്രം", "I, III എന്നിവ മാത്രം", "I, II, III എല്ലാം ശരി"],
+            answer: 3,
+            explanation: "ഗംഗ, ബ്രഹ്മപുത്ര, ഗോദാവരി തുടങ്ങിയ വലിയ നദികൾ വലിയ തോതിൽ ശുദ്ധജലം ബംഗാൾ ഉൾക്കടലിലേക്ക് എത്തിക്കുന്നു. ഇത് അവിടുത്തെ ലവണാംശം കുറയ്ക്കുകയും മുകളിലെ പാളി പെട്ടെന്ന് ചൂടാകാൻ സഹായിക്കുകയും ചെയ്യുന്നു. ഇതാണ് അവിടെ കൂടുതൽ ചുഴലിക്കാറ്റുകൾ ഉണ്ടാകാൻ കാരണം."
+        },
+        {
+            statements: null,
+            question: "താഴെ പറയുന്ന നദികളിൽ 'അപൂർവ്വവർത്തി നദി' (Antecedent River) എന്ന വിഭാഗത്തിൽ പെടാത്ത നദി ഏതാണ്?",
+            options: ["സിന്ധു (Indus)", "സത്‌ലജ് (Sutlej)", "ഗോദാവരി (Godavari)", "ബ്രഹ്മപുത്ര (Brahmaputra)"],
+            answer: 2,
+            explanation: "ഹിമാലയ പർവ്വതം രൂപപ്പെടുന്നതിന് മുൻപ് തന്നെ നിലവിലിരുന്നതും പർവ്വത രൂപീകരണത്തിന് അനുസരിച്ച് മലകൾ തുരന്ന് സ്വന്തം വഴി നിലനിർത്തിയതുമായ നദികളാണ് അന്റീസിഡന്റ് നദികൾ (സിന്ധു, സത്‌ലജ്, ബ്രഹ്മപുത്ര). എന്നാൽ ഗോദാവരി ഒരു ഉപദ്വീപീയ നദിയാണ്."
+        },
+        {
+            statements: "I. പശ്ചിമഘട്ടത്തിന്റെ കിഴക്കൻ ചരിവുകളിൽ (Leeward side) സ്ഥിതി ചെയ്യുന്നതിനാലാണ് ഇവിടെ ഒരോഗ്രാഫിക് മഴ കുറയുന്നത്.<br>II. ഇവിടെ പ്രധാനമായും മുള്ളുകളുള്ള ലഘുവനങ്ങളും (Thorny Scrub Forests) വരണ്ട ഇലപൊഴിയും വനങ്ങളുമാണ് കാണപ്പെടുന്നത്.<br>III. തെക്കുപടിഞ്ഞാറൻ മൺസൂണിന്റെ സമയത്താണ് ഇവിടെ കേരളത്തിൽ ഏറ്റവും കൂടുതൽ മഴ ലഭിക്കുന്നത്.",
+            question: "കേരളത്തിലെ ഏക മഴനിഴൽ പ്രദേശം ആയ ചിന്നാർ/അട്ടപ്പാടി മേഖലയെക്കുറിച്ചുള്ള പ്രസ്താവനകൾ ഏവ?",
+            options: ["I, II എന്നിവ മാത്രം", "II, III എന്നിവ മാത്രം", "I, III എന്നിവ മാത്രം", "I, II, III എല്ലാം"],
+            answer: 0,
+            explanation: "ഈ പ്രദേശങ്ങളിൽ തെക്കുപടിഞ്ഞാറൻ മൺസൂൺ കാലത്ത് മഴ പെയ്യാറില്ല (മഴനിഴൽ പ്രദേശം). ഒക്ടോബർ-നവംബർ മാസങ്ങളിലെ തുലാവർഷത്തിലാണ് (വടക്കുകിഴക്കൻ മൺസൂൺ) ഇവിടെ അല്പമെങ്കിലും മഴ ലഭിക്കുന്നത്."
+        },
+        {
+            statements: null,
+            question: "ഇന്ത്യൻ മൺസൂണിലെ പെട്ടെന്നുള്ള ആഗമനത്തിന് (Burst of Monsoon) കാരണമാകുന്ന പ്രധാന അന്തരീക്ഷ പ്രതിഭാസം ഏതാണ്?",
+            options: [
+                "Subtropical Westerly Jet സ്ട്രീമിന്റെ ഹിമാലയത്തിന് തെക്കുനിന്നുള്ള പിന്മാറ്റം.",
+                "Tropical Easterly Jet സ്ട്രീമിന്റെ പെട്ടെന്നുള്ള തിരോധാനം.",
+                "ഐ.ടി.സി.സെഡ് (ITCZ) തെക്കൻ ഉപഗോളത്തിലേക്ക് ചലിക്കുന്നത്.",
+                "വടക്കുകിഴക്കൻ വാണിജ്യവാതങ്ങളുടെ (Trade Winds) പെട്ടെന്നുള്ള ശക്തിപ്പെടൽ."
+            ],
+            answer: 0,
+            explanation: "വേനൽക്കാലത്ത് വെസ്റ്റർലി ജെറ്റ് സ്ട്രീം ഹിമാലയത്തിന് വടക്കോട്ട് മാറുന്നതോടെയാണ് ഉത്തരേന്ത്യൻ സമതലങ്ങളിൽ ശക്തമായ ന്യൂനമർദ്ദം രൂപപ്പെടുന്നതും തെക്കുപടിഞ്ഞാറൻ മൺസൂൺ കാറ്റുകൾ ഇന്ത്യയിലേക്ക് ഇരച്ചുകയറുന്നതും."
+        },
+        {
+            statements: null,
+            question: "നാഷണൽ അഗ്രിക്കൾച്ചറൽ റിサーチ പ്രോജക്ട് (NARP) പ്രകാരം കേരളത്തെ എത്ര കാർഷിക-കാലാവസ്ഥാ മേഖലകളായി (Agro-Climatic Zones) തിരിച്ചിരിക്കുന്നു?",
+            options: ["3", "5", "7", "14"],
+            answer: 1,
+            explanation: "കേരളത്തെ പ്രധാനമായും 5 കാർഷിക-കാലാവസ്ഥാ മേഖലകളായി തിരിച്ചിരിക്കുന്നു: 1) വടക്കൻ മേഖല, 2) മധ്യ മേഖല, 3) തെക്കൻ മേഖല, 4) ഹൈറേഞ്ച് മേഖല, 5) പ്രത്യേക പ്രശ്നബാധിത മേഖല (കുട്ടനാടും പൊക്കാളി പാടങ്ങളും)."
+        },
+        {
+            statements: "1. പാലക്കാട് ചുരം - പാലക്കാട് - കോയമ്പത്തൂർ<br>2. പെരമ്പാടി ചുരം - കണ്ണൂർ - കൂർഗ്<br>3. താമരശ്ശേരി ചുരം - കോഴിക്കോട് - വയനാട്<br>4. ആര്യങ്കാവ് ചുരം - കൊല്ലം - ചെങ്കോട്ട",
+            question: "പശ്ചിമഘട്ടത്തിലെ പ്രധാന ചുരങ്ങളും അവ ബന്ധിപ്പിക്കുന്ന സ്ഥലങ്ങളും ശരിയായി ജോഡി ചേർത്തത് ഏത്?",
+            options: ["1, 3 എന്നിവ മാത്രം", "1, 2, 3 എന്നിവ മാത്രം", "2, 3, 4 എന്നിവ മാത്രം", "മുകളിൽ നൽകിയവയെല്ലാം ശരിയാണ്"],
+            answer: 3,
+            explanation: "തന്നിരിക്കുന്ന നാല് ചുരങ്ങളും അവയുടെ ബന്ധിപ്പിക്കുന്ന പാതകളും പൂർണ്ണമായും ശരിയാണ്. കേരളത്തെയും അയൽ സംസ്ഥാനങ്ങളെയും തമ്മിൽ ബന്ധിപ്പിക്കുന്ന പ്രധാന സാമ്പത്തിക-ഭൂമിശാസ്ത്ര ഇടനാഴികളാണിവ."
+        },
+        {
+            statements: null,
+            question: "അന്താരാഷ്ട്ര പ്രാധാന്യമുള്ള തണ്ണീർത്തടങ്ങളുടെ സംരക്ഷണവുമായി ബന്ധപ്പെട്ട 'മോൺട്രെക്സ് റെക്കോർഡിൽ' (Montreux Record) നിലവിൽ ഉൾപ്പെട്ടിട്ടുള്ള ഇന്ത്യൻ തണ്ണീർത്തടം ഏതാണ്?",
+            options: ["വേമ്പനാട്-കോൾ തണ്ണീർത്തടം", "ലോക്തക് തടാകം (Loktak Lake)", "ചിലിക തടാകം (Chilika Lake)", "അഷ്ടമുടി കായൽ"],
+            answer: 1,
+            explanation: "മനുഷ്യന്റെ ഇടപെടലുകൾ മൂലം പാരിസ്ഥിതിക നാശം സംഭവിച്ചുകൊണ്ടിരിക്കുന്ന റാംസർ സൈറ്റുകളുടെ പട്ടികയാണ് മോൺട്രെക്സ് റെക്കോർഡ്. ഇന്ത്യയിൽ നിന്ന് മണിപ്പൂരിലെ ലോക്തക് തടാകവും രാജസ്ഥാനിലെ കേവലാദേവ് നാഷണൽ പാർക്കും മാത്രമാണ് ഇതിലുള്ളത്."
+        },
+        {
+            statements: null,
+            question: "ജനസംഖ്യാ പരിണാമ സിദ്ധാന്ത പ്രകാരം (Theory of Demographic Transition) കേരളം നിലവിൽ ഏത് ഘട്ടത്തിലാണ് സ്ഥിതി ചെയ്യുന്നത്?",
+            options: ["ഒന്നാം ഘട്ടം", "രണ്ടാം ഘട്ടം", "മൂന്നാം ഘട്ടം", "നാലാം ഘട്ടം (Low Stationary Stage)"],
+            answer: 3,
+            explanation: "ഇന്ത്യയിലെ ഭൂരിഭാഗം സംസ്ഥാനങ്ങളും മൂന്നാം ഘട്ടത്തിലാണെങ്കിൽ (കുറയുന്ന ജനനനിരക്കും മരണനിരക്കും), കേരളം ഇതിനകം നാലാം ഘട്ടത്തിലേക്ക് (വളരെ കുറഞ്ഞ ജനന-മരണ നിരക്കുകൾ മൂലം ജനസംഖ്യ സ്ഥിരത കൈവരിക്കുന്ന അവസ്ഥ) പ്രവേശിച്ചു കഴിഞ്ഞു."
+        },
+        {
+            statements: "1. ഔട്ടർ കോർ - ഇന്നർ കോർ : ലേമാൻ അസന്തതി (Lehmann)<br>2. അപ്പർ മന്റിൽ - ലോവർ മന്റിൽ : റെപെറ്റി അസന്തതി (Repetti)<br>3. അപ്പർ ക്രസ്റ്റ് - ലോവർ ക്രസ്റ്റ് : കോൺറാഡ് അസന്തതി (Conrad)",
+            question: "ഭൂമിയുടെ ആഭ്യന്തര ഘടനയിലെ പാളികളും അവയെ വേർതിരിക്കുന്ന അസന്തതികളും (Discontinuities) ശരിയായി ജോഡി ചേർത്തത് ഏത്?",
+            options: ["1 മാത്രം", "1, 3 എന്നിവ മാത്രം", "2, 3 എന്നിവ മാത്രം", "1, 2, 3 എല്ലാം ശരിയാണ്"],
+            answer: 3,
+            explanation: "ഭൂമിയുടെ ആഴങ്ങളിലേക്ക് പോകുമ്പോൾ ശിലകളുടെ സാന്ദ്രതയിലുണ്ടാകുന്ന വ്യത്യാസം അളക്കുന്ന അതിർത്തികളാണിവ. ക്രസ്റ്റിനെയും മന്റിലിനെയും വേർതിരിക്കുന്നത് 'മോഹോ' അസന്തതിയും, മന്റിലിനെയും കോറിനെയും വേർതിരിക്കുന്നത് 'ഗുട്ടൻബർഗ്' അസന്തതിയുമാണ്."
+        },
+        {
+            statements: null,
+            question: "കുട്ടനാടിന്റെ ഭൂമിശാസ്ത്ര സവിശേഷതകളുമായി ബന്ധപ്പെട്ട 'തോട്ടപ്പള്ളി സ്പിൽവേ' യുടെ പ്രധാന ലക്ഷ്യം എന്താണ്?",
+            options: [
+                "വേനൽക്കാലത്ത് കായലിലേക്ക് ഉപ്പുവെള്ളം കയറുന്നത് തടയുക.",
+                "കിഴക്കൻ നദികളിൽ നിന്ന് വരുന്ന അധിക വെള്ളം വേമ്പനാട്ട് കായലിൽ എത്തുന്നതിന് മുൻപ് നേരിട്ട് കടലിലേക്ക് ഒഴുക്കി വെള്ളപ്പൊക്കം നിയന്ത്രിക്കുക.",
+                "കുട്ടനാട്ടിലെ ഉൾനാടൻ മത്സ്യബന്ധനം പ്രോത്സാഹിപ്പിക്കുക.",
+                "ദേശീയ ജലപാതയുടെ സുഗമമായ സഞ്ചാരം ഉറപ്പാക്കുക."
+            ],
+            answer: 1,
+            explanation: "പമ്പ, അച്ചൻകോവിൽ, മണിമല നദികളിലെ പ്രളയജലം കുട്ടനാടിനെ മുക്കാതിരിക്കാൻ 1955-ൽ നിർമ്മിച്ചതാണ് തോട്ടപ്പള്ളി സ്പിൽവേ. (ഉപ്പുവെള്ളം തടയുന്നത് തണ്ണീർമുക്കം ബണ്ടാണ്)."
+        },
+        {
+            statements: "I. ഈ മേഖലകളിൽ പുതിയ ക്വാറികൾക്കും ഖനനങ്ങൾക്കും കർശന നിരോധനം ഏർപ്പെടുത്തുക.<br>II. വൻകിട അണക്കെട്ടുകളുടെ നിർമ്മാണവും പുതിയ മലിനീകരണമുണ്ടാക്കുന്ന വ്യവസായങ്ങളും പൂർണ്ണമായി ഒഴിവാക്കുക.<br>III. നിലവിലുള്ള എല്ലാ കൃഷികളും നിർത്തിവെച്ച് പ്രദേശം പൂർണ്ണ വനഭൂമിയാക്കി മാറ്റുക.",
+            question: "മാധവ് ഗാഡ്ഗിൽ കമ്മിറ്റി ശുപാർശ ചെയ്ത 'പരിസ്ഥിതി സെൻസിറ്റീവ് സോൺ 1' (ESZ-1) സംബന്ധിച്ച് ശരിയായ പ്രസ്താവന ഏത്?",
+            options: ["I മാത്രം", "I, II എന്നിവ മാത്രം", "II, III എന്നിവ മാത്രം", "I, II, III എല്ലാം"],
+            answer: 1,
+            explanation: "ഗാഡ്ഗിൽ കമ്മിറ്റി പരിസ്ഥിതിക്ക് കനത്ത ആഘാതമുണ്ടാക്കുന്ന വൻകിട വികസനങ്ങൾ മാത്രമാണ് നിരോധിക്കാൻ പറഞ്ഞത്. പരമ്പരാഗത കൃഷിയോ ജനങ്ങളെ ഒഴിപ്പിക്കലോ റിപ്പോർട്ടിൽ പറഞ്ഞിട്ടില്ലാത്തതിനാൽ മൂന്നാമത്തെ പ്രസ്താവന തെറ്റാണ്."
+        },
+        {
+            statements: null,
+            question: "ആഗോള വാതങ്ങളെയും മർദ്ദമേഖലകളെയും സംബന്ധിച്ച താഴെ പറയുന്ന പ്രസ്താവനകളിൽ തെറ്റായ പ്രസ്താവന ഏതാണ്?",
+            options: [
+                "ഉപോഷ്ണമേഖലാ ഉയർന്ന മർദ്ദമേഖലകൾ (Subtropical Highs) 'ഹോഴ്സ് ലാറ്റിറ്റ്യൂഡ്സ്' എന്നറിയപ്പെടുന്നു.",
+                "ഐ.ടി.സി.സെഡ് (ITCZ) എന്നത് വടക്കുകിഴക്കൻ - തെക്കുപടിഞ്ഞാറൻ വാണിജ്യവാതങ്ങൾ പരസ്പരം സന്ധിക്കുന്ന ഭൂമധ്യരേഖാ താഴ്ന്ന മർദ്ദമേഖലയാണ്.",
+                "കാറ്റിന്റെ ദിശയെ സ്വാധീനിക്കുന്ന കൊറിയോലിസ് ബലം (Coriolis Force) ധ്രുവങ്ങളിൽ പരമാവധിയും ഭൂമധ്യരേഖയിൽ പൂജ്യവുമായിരിക്കും.",
+                "പടിഞ്ഞാറൻ വാതങ്ങൾ (Westerlies) ഇരു ഉപഗോളങ്ങളിലെയും 35 ഡിഗ്രി മുതൽ 60 ഡിഗ്രി അക്ഷാംശങ്ങൾക്കിടയിലാണ് വീശുന്നത്."
+            ],
+            answer: 1,
+            explanation: "ITCZ എന്നത് വടക്കുകിഴക്കൻ വാണിജ്യവാതങ്ങളും തെക്കുകിഴക്കൻ വാണിജ്യവാതങ്ങളും (Southern Trade winds) തമ്മിൽ സന്ധിക്കുന്ന സ്ഥലമാണ്; തെക്കുപടിഞ്ഞാറൻ വാതങ്ങളല്ല. അതിനാൽ ഈ പ്രസ്താവന തെറ്റാണ്."
+        },
+        {
+            statements: null,
+            question: "മഹാനദി, ഗോദാവരി, കൃഷ്ണ, കാവേരി തുടങ്ങിയ ഭൂരിഭാഗം വലിയ ദക്ഷിണേന്ത്യൻ നദികളും പടിഞ്ഞാറുനിന്ന് ഉത്ഭവിച്ച് കിഴക്കോട്ട് ഒഴുകാൻ കാരണമാകുന്ന ഭൂമിശാസ്ത്രപരമായ ഘടകമേത്?",
+            options: [
+                "പശ്ചിമഘട്ട മലനിരകളുടെ അമിതമായ ഉയരം.",
+                "ഉപദ്വീപീയ പീഠഭൂമിക്ക് (Peninsular Plateau) പൊതുവായി പടിഞ്ഞാറുനിന്ന് കിഴക്കോട്ട് നേരിയ ചരിവുണ്ട് (Tilt).",
+                "കിഴക്കൻ ഘട്ട മലനിരകൾ തുടർച്ചയില്ലാത്തതായതു കൊണ്ട്.",
+                "ഈ നദികളെല്ലാം ഹിമാലയൻ നദികളെപ്പോലെ റിഫ്റ്റ് വാലികളിലൂടെ ഒഴുകുന്നതു കൊണ്ട്."
+            ],
+            answer: 1,
+            explanation: "ക്риറ്റേഷ്യസ് യുഗത്തിലുണ്ടായ ഭൗമചലനങ്ങൾ കാരണം ഇന്ത്യൻ ഉപദ്വീപിന്റെ പീഠഭൂമി മൊത്തത്തിൽ കിഴക്കോട്ട് ചരിഞ്ഞാണ് ഇരിക്കുന്നത്. അതുകൊണ്ടാണ് പശ്ചിമഘട്ടത്തിൽ നിന്ന് ഉത്ഭവിക്കുന്ന നദികൾ കിഴക്കോട്ട് ഒഴുകി ബംഗാൾ ഉൾക്കടലിൽ പതിക്കുന്നത്."
+        }
+    ];
+
+    let currentQuestionIndex = 0;
+    let userAnswers = new Array(quizData.length).fill(null);
+
+    const quizScreen = document.getElementById('quiz-screen');
+    const resultScreen = document.getElementById('result-screen');
+    const progressText = document.getElementById('progress-text');
+    const progressFill = document.getElementById('progress-fill');
+    const statementsDiv = document.getElementById('statements');
+    const questionDiv = document.getElementById('question');
+    const optionsDiv = document.getElementById('options');
+    const explanationDiv = document.getElementById('explanation');
+    const prevButton = document.getElementById('prev-button');
+    const nextButton = document.getElementById('next-button');
+
+    function loadQuestion() {
+        const currentQuestion = quizData[currentQuestionIndex];
+        
+        if (currentQuestionIndex === 0) {
+            prevButton.style.visibility = 'hidden'; 
+        } else {
+            prevButton.style.visibility = 'visible';
+        }
+
+        progressText.innerText = `ചോദ്യം ${currentQuestionIndex + 1}/${quizData.length}`;
+        progressFill.style.width = `${((currentQuestionIndex + 1) / quizData.length) * 100}%`;
+
+        if (currentQuestion.statements) {
+            statementsDiv.innerHTML = currentQuestion.statements;
+            statementsDiv.style.display = 'block';
+        } else {
+            statementsDiv.style.display = 'none';
+        }
+
+        questionDiv.innerText = currentQuestion.question;
+
+        optionsDiv.innerHTML = '';
+        currentQuestion.options.forEach((option, index) => {
+            const button = document.createElement('button');
+            button.className = 'option-btn';
+            button.innerText = option;
+            button.onclick = () => checkAnswer(index, button);
+            optionsDiv.appendChild(button);
+        });
+
+        if (userAnswers[currentQuestionIndex] !== null) {
+            const savedIndex = userAnswers[currentQuestionIndex];
+            const buttons = optionsDiv.querySelectorAll('.option-btn');
+            
+            buttons.forEach(button => button.disabled = true);
+
+            if (savedIndex === currentQuestion.answer) {
+                buttons[savedIndex].classList.add('correct');
+            } else {
+                buttons[savedIndex].classList.add('wrong');
+                buttons[currentQuestion.answer].classList.add('correct');
+            }
+
+            explanationDiv.innerHTML = `<strong>ശരീയുത്തരം: ${currentQuestion.options[currentQuestion.answer]}</strong><br><br>${currentQuestion.explanation}`;
+            explanationDiv.style.display = 'block';
+            
+            nextButton.style.display = 'block';
+            updateNextButtonText();
+        } else {
+            explanationDiv.style.display = 'none';
+            nextButton.style.display = 'none';
+        }
+    }
+
+    function checkAnswer(selectedIndex, clickedButton) {
+        userAnswers[currentQuestionIndex] = selectedIndex;
+        const currentQuestion = quizData[currentQuestionIndex];
+        const buttons = optionsDiv.querySelectorAll('.option-btn');
+
+        buttons.forEach(button => button.disabled = true);
+
+        if (selectedIndex === currentQuestion.answer) {
+            clickedButton.classList.add('correct');
+        } else {
+            clickedButton.classList.add('wrong');
+            buttons[currentQuestion.answer].classList.add('correct');
+        }
+
+        explanationDiv.innerHTML = `<strong>ശരിയായ ഉത്തരം: ${currentQuestion.options[currentQuestion.answer]}</strong><br><br>${currentQuestion.explanation}`;
+        explanationDiv.style.display = 'block';
+
+        nextButton.style.display = 'block';
+        updateNextButtonText();
+    }
+
+    function updateNextButtonText() {
+        if (currentQuestionIndex === quizData.length - 1) {
+            nextButton.innerText = "ഫലം കാണുക";
+        } else {
+            nextButton.innerText = "അടുത്ത ചോദ്യം";
+        }
+    }
+
+    function nextQuestion() {
+        if (currentQuestionIndex < quizData.length - 1) {
+            currentQuestionIndex++;
+            loadQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function prevQuestion() {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            loadQuestion();
+        }
+    }
+
+    function showResults() {
+        quizScreen.style.display = 'none';
+        resultScreen.style.display = 'block';
+        
+        let finalScore = 0;
+        userAnswers.forEach((ans, idx) => {
+            if (ans === quizData[idx].answer) finalScore++;
+        });
+
+        document.getElementById('score-display').innerText = `${finalScore} / ${quizData.length}`;
+        
+        const messageDiv = document.getElementById('performance-message');
+        if(finalScore >= 18) {
+            messageDiv.innerText = "മികച്ച വിജയം! നിങ്ങൾ KAS / Degree Level പരീക്ഷകൾക്ക് പൂർണ്ണ സജ്ജനാണ്. 🏆";
+            messageDiv.style.color = "var(--success-color)";
+        } else if(finalScore >= 12) {
+            messageDiv.innerText = "നല്ല പ്രകടനം! കുറച്ചുകൂടി ശ്രദ്ധിച്ചാൽ ഉയർന്ന മാർക്ക് നേടാം. 👍";
+            messageDiv.style.color = "var(--secondary-color)";
+        } else {
+            messageDiv.innerText = "കൂടുതൽ പരിശീലനം ആവശ്യമുണ്ട്. വിശദീകരണങ്ങൾ വീണ്ടും വായിച്ചു പഠിക്കുക. 📚";
+            messageDiv.style.color = "var(--danger-color)";
+        }
+    }
+
+    function restartQuiz() {
+        currentQuestionIndex = 0;
+        userAnswers = new Array(quizData.length).fill(null);
+        resultScreen.style.display = 'none';
+        quizScreen.style.display = 'block';
+        loadQuestion();
+    }
+
+    loadQuestion();
+</script>
+
+</body>
+</html>
